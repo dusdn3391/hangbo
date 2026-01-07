@@ -5,7 +5,7 @@ import Footer from "@/components/Home/Footer";
 import Login from "@/components/Login/page";
 
 export default function HomePage() {
-  const isLoggedIn = false; 
+  const isLoggedIn = true;
 
   if (!isLoggedIn) {
     return <Login />;

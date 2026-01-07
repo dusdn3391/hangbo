@@ -1,126 +1,58 @@
 "use client";
 
-import { useState } from "react";
-import { Music, Mail, Lock } from "lucide-react";
+import { Music } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isSignUp, setIsSignUp] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log({ email, password, isSignUp });
-      localStorage.setItem("onboardingCompleted", "false");
-    
-    router.push("/onboarding");
-  };
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleGoogleLogin = () => {
-
-  localStorage.setItem("isLoggedIn", "true");
-  localStorage.setItem("onboardingCompleted", "false");
-  
-  router.push("/onboarding");
+    setIsLoading(true);
+    // TODO: 실제 Google OAuth 로직으로 교체
+    setTimeout(() => {
+      sessionStorage.setItem("isLoggedIn", "true");
+      sessionStorage.setItem("onboardingCompleted", "false");
+      router.push("/onboarding");
+    }, 500);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center">
-              <Music className="w-10 h-10 text-white" />
+        {/* Logo & Title */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center mb-6">
+            <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl flex items-center justify-center shadow-lg">
+              <Music className="w-12 h-12 text-white" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Concert Alert</h1>
-          <p className="text-gray-600">
-            좋아하는 아티스트의 콘서트를 절대 놓치지 마세요
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">
+            Concert Alert
+          </h1>
+          <p className="text-gray-600 text-lg">
+            좋아하는 아티스트의 공연 소식을 놓치지 마세요
           </p>
         </div>
 
-        {/* Login Form */}
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            {isSignUp ? "회원가입" : "로그인"}
-          </h2>
-          <p className="text-gray-600 mb-6">
-            {isSignUp
-              ? "콘서트 알림을 받으려면 계정을 만드세요"
-              : "계정에 로그인하여 알림을 관리하세요"}
-          </p>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                이메일
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
-                  placeholder="example@email.com"
-                  required
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                비밀번호
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:scale-[1.02] transition-all"
-            >
-              {isSignUp ? "가입하기" : "로그인"}
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <button
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="text-purple-600 hover:text-purple-700 font-medium transition-colors"
-            >
-              {isSignUp
-                ? "이미 계정이 있으신가요? 로그인"
-                : "계정이 없으신가요? 회원가입"}
-            </button>
-          </div>
-
-          <div className="mt-6 relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">또는</span>
-            </div>
+        {/* Login Card */}
+        <div className="bg-white rounded-3xl shadow-xl p-8 backdrop-blur-sm bg-opacity-95">
+          <div className="text-center mb-6">
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">
+              시작하기
+            </h2>
+            <p className="text-sm text-gray-500">
+              Google 계정으로 간편하게 로그인하세요
+            </p>
           </div>
 
           <button
             onClick={handleGoogleLogin}
-            className="mt-6 w-full flex items-center justify-center gap-3 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
+            disabled={isLoading}
+            className="w-full flex items-center justify-center gap-3 py-4 px-6 bg-white border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24">
+            <svg className="w-6 h-6" viewBox="0 0 24 24">
               <path
                 fill="#4285F4"
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -138,8 +70,14 @@ export default function LoginPage() {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            <span className="font-medium text-gray-700">Google로 계속하기</span>
+            <span className="font-semibold text-gray-700 text-lg">
+              {isLoading ? "로그인 중..." : "Google로 계속하기"}
+            </span>
           </button>
+
+          <p className="text-xs text-gray-400 text-center mt-6">
+            로그인하면 서비스 이용약관 및 개인정보처리방침에 동의하게 됩니다
+          </p>
         </div>
       </div>
     </div>
